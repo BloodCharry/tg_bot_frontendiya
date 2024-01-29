@@ -8,7 +8,11 @@ from aiogram import (
 
 from aiogram.filters import CommandStart
 
-bot = Bot(token="")
+from dotenv import find_dotenv, load_dotenv
+
+load_dotenv(find_dotenv())
+
+bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 
@@ -26,10 +30,11 @@ async def echo(message: types.Message):
     elif text in ["Пока", "пока", "bye", "Bye", "goodbye", "Goodbye", "до свидания", "До свидания"]:
         await message.answer("И тебе пока!")
     else:
-        await message.answer("Я пока что не обучен отвечать на такие вопросы")
+        await message.reply("Я пока что не умею отвечать на такие вопросы")
 
 
 async def main() -> None:
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 
