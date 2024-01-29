@@ -8,7 +8,7 @@ from aiogram import (
 
 from aiogram.filters import CommandStart
 
-bot = Bot(token="5801532244:AAEZeAKdLYMsO7bGZkLFrL1XgOg57f3hRNg")
+bot = Bot(token="")
 dp = Dispatcher()
 
 
