@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 from aiogram import (
     Bot,
@@ -12,7 +13,7 @@ from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
-bot = Bot(token=TOKEN)
+bot = Bot(token=os.get_env("TOKEN"))
 dp = Dispatcher()
 
 
