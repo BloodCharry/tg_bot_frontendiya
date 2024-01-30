@@ -1,6 +1,7 @@
 from aiogram import (
     types,
     Router,
+    F
 )
 from aiogram.filters import CommandStart, Command
 
@@ -9,7 +10,7 @@ user_private_router = Router()
 
 @user_private_router.message(CommandStart())
 async def on_startup(message: types.Message):
-    await message.answer("Привет, я виртуальный помошник")
+    await message.answer("Привет, я виртуальный помошник, чем могу помочь?")
 
 
 @user_private_router.message(Command('menu'))
@@ -22,13 +23,19 @@ async def about_cmd(message: types.Message):
     await message.answer("О нас:")
 
 
-@user_private_router.message()
-async def echo(message: types.Message):
-    text = message.text
+@user_private_router.message(F.text.lower().in_(
+    [
+        'привет', 'hi', 'хай', 'hello'
+    ]
+))
+async def echo_hello(message: types.Message):
+    await message.answer("И тебе привет!")
 
-    if text in ["Привет", "привет", "hi", "Hi", "хай", "Хай", "hello", "Hello"]:
-        await message.answer("И тебе привет!")
-    elif text in ["Пока", "пока", "bye", "Bye", "goodbye", "Goodbye", "до свидания", "До свидания"]:
-        await message.answer("И тебе пока!")
-    else:
-        await message.reply("Я пока что не умею отвечать на такие вопросы")
+
+@user_private_router.message(F.text.lower().in_(
+    [
+        "пока", "bye", "goodbye", "до свидания", "прощай", "до свидания"
+    ]
+))
+async def echo_by(message: types.Message):
+    await message.answer("И тебе пока!")
