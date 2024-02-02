@@ -4,13 +4,20 @@ from aiogram import (
     F
 )
 from aiogram.filters import CommandStart, Command
+import random
+from common import scenarios
 
 user_private_router = Router()
 
 
 @user_private_router.message(CommandStart())
 async def on_startup(message: types.Message):
-    await message.answer("Привет, я виртуальный помошник, чем могу помочь?")
+    tale = len(scenarios.WELCOME_MESSAGES) - 1
+    await message.answer(
+        scenarios.WELCOME_MESSAGES[
+            random.randint(0, tale)
+        ]
+    )
 
 
 @user_private_router.message(Command('menu'))
@@ -29,7 +36,10 @@ async def about_cmd(message: types.Message):
     ]
 ))
 async def echo_hello(message: types.Message):
-    await message.answer("И тебе привет!")
+    tale = len(scenarios.WELCOME_MESSAGES) - 1
+    await message.answer(scenarios.WELCOME_MESSAGES[
+            random.randint(0, tale)
+        ])
 
 
 @user_private_router.message(F.text.lower().in_(
@@ -38,4 +48,19 @@ async def echo_hello(message: types.Message):
     ]
 ))
 async def echo_by(message: types.Message):
-    await message.answer("И тебе пока!")
+    tale = len(scenarios.FAREWELL_MESSAGES) - 1
+    await message.answer(scenarios.FAREWELL_MESSAGES[
+            random.randint(0, tale)
+    ])
+
+
+@user_private_router.message(F.text.lower().in_(
+    [
+        "как дела", "как у вас дела", "как делишки",
+    ]
+))
+async def echo_how_are_you(message: types.Message):
+    tale = len(scenarios.HOW_ARE_YOU_RESPONSES) - 1
+    await message.answer(scenarios.HOW_ARE_YOU_RESPONSES[
+            random.randint(0, tale)
+    ])
