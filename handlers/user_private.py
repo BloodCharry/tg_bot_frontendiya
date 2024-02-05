@@ -3,11 +3,15 @@ from aiogram import (
     Router,
     F
 )
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import (CommandStart,
+                             Command)
 import random
+
 from common import scenarios
+from filters.chat_types import CustomChatFilter
 
 user_private_router = Router()
+user_private_router.message.filter(CustomChatFilter(['private']))
 
 
 @user_private_router.message(CommandStart())
