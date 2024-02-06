@@ -4,11 +4,14 @@ from aiogram import (
     F
 )
 from aiogram.filters import (CommandStart,
-                             Command)
+                             Command,
+                             or_f,
+                             )
 import random
 
 from common import scenarios
 from filters.chat_types import CustomChatFilter
+from keyboards import reply
 
 user_private_router = Router()
 user_private_router.message.filter(CustomChatFilter(['private']))
@@ -18,15 +21,17 @@ user_private_router.message.filter(CustomChatFilter(['private']))
 async def on_startup(message: types.Message):
     tale = len(scenarios.WELCOME_MESSAGES) - 1
     await message.answer(
-        scenarios.WELCOME_MESSAGES[
-            random.randint(0, tale)
-        ]
+        scenarios.WELCOME_MESSAGES[random.randint(0, tale)], reply_markup=reply.start_btn
     )
+
+@user_private_router.message(or_f(Command('menu'), (F.text.lower() == "меню")))
+async def menu_cmd(message: types.Message):
+    await message.answer("Вот меню:\n\n1. Первый пункт\n2. Второй пункт\n3. Третий пункт")
 
 
 @user_private_router.message(Command('menu'))
 async def menu_cmd(message: types.Message):
-    await message.answer("Мой меню:\n\n1. Первый пункт\n2. Второй пункт\n3. Третий пункт")
+    await message.answer("меню:\n\n1. Первый пункт\n2. Второй пункт\n3. Третий пункт")
 
 
 @user_private_router.message(Command('about'))
