@@ -7,6 +7,8 @@ from aiogram.filters import (CommandStart,
                              Command,
                              or_f,
                              )
+
+from aiogram.enums import ParseMode
 import random
 
 from common import scenarios
@@ -21,17 +23,20 @@ user_private_router.message.filter(CustomChatFilter(['private']))
 async def on_startup(message: types.Message):
     tale = len(scenarios.WELCOME_MESSAGES) - 1
     await message.answer(
-        scenarios.WELCOME_MESSAGES[random.randint(0, tale)], reply_markup=reply.start_btn
+        scenarios.WELCOME_MESSAGES[random.randint(0, tale)],
+        reply_markup=reply.start_btn.as_markup(
+            resize_keyboard=True,
+        )
     )
 
-@user_private_router.message(or_f(Command('menu'), (F.text.lower() == "меню")))
-async def menu_cmd(message: types.Message):
-    await message.answer("Вот меню:\n\n1. Первый пункт\n2. Второй пункт\n3. Третий пункт")
 
-
-@user_private_router.message(Command('menu'))
+@user_private_router.message(or_f(Command('menu'), (F.text.lower() == "меню \U0001F448")))
 async def menu_cmd(message: types.Message):
-    await message.answer("меню:\n\n1. Первый пункт\n2. Второй пункт\n3. Третий пункт")
+    # TODO для удаления клавиатуры добавить аргумент reply_markup=reply.del_keyboard
+    await message.answer("<b>Вот меню:</b>", reply_markup=reply.menu_btn.as_markup(
+        resize_keyboard=True,
+        parse_mode=ParseMode.HTML
+    ))
 
 
 @user_private_router.message(Command('about'))
@@ -47,8 +52,8 @@ async def about_cmd(message: types.Message):
 async def echo_hello(message: types.Message):
     tale = len(scenarios.WELCOME_MESSAGES) - 1
     await message.answer(scenarios.WELCOME_MESSAGES[
-            random.randint(0, tale)
-        ])
+                             random.randint(0, tale)
+                         ])
 
 
 @user_private_router.message(F.text.lower().in_(
@@ -59,8 +64,8 @@ async def echo_hello(message: types.Message):
 async def echo_by(message: types.Message):
     tale = len(scenarios.FAREWELL_MESSAGES) - 1
     await message.answer(scenarios.FAREWELL_MESSAGES[
-            random.randint(0, tale)
-    ])
+                             random.randint(0, tale)
+                         ])
 
 
 @user_private_router.message(F.text.lower().in_(
@@ -71,5 +76,6 @@ async def echo_by(message: types.Message):
 async def echo_how_are_you(message: types.Message):
     tale = len(scenarios.HOW_ARE_YOU_RESPONSES) - 1
     await message.answer(scenarios.HOW_ARE_YOU_RESPONSES[
-            random.randint(0, tale)
-    ])
+                             random.randint(0, tale)
+                         ])
+
