@@ -5,6 +5,7 @@ from aiogram import (
     Bot,
     Dispatcher,
 )
+from aiogram.enums import ParseMode
 
 from aiogram.types import BotCommandScopeAllPrivateChats
 
@@ -21,7 +22,7 @@ ALOOWED_OBDATES = [
     "edited_message"
 ]
 
-bot = Bot(token=os.getenv("TOKEN"))
+bot = Bot(token=os.getenv("TOKEN"),  parse_mode=ParseMode.HTML)
 dp = Dispatcher()
 
 dp.include_routers(user_private_router, user_group_router)

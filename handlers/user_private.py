@@ -9,6 +9,7 @@ from aiogram.filters import (CommandStart,
                              )
 
 from aiogram.enums import ParseMode
+from aiogram.utils.formatting import as_list, as_marked_section, Bold
 import random
 
 from common import scenarios
@@ -33,9 +34,8 @@ async def on_startup(message: types.Message):
 @user_private_router.message(or_f(Command('menu'), (F.text.lower() == "меню \U0001F448")))
 async def menu_cmd(message: types.Message):
     # TODO для удаления клавиатуры добавить аргумент reply_markup=reply.del_keyboard
-    await message.answer("<b>Вот меню:</b>", reply_markup=reply.menu_btn.as_markup(
+    await message.answer("Вот меню:", reply_markup=reply.menu_btn.as_markup(
         resize_keyboard=True,
-        parse_mode=ParseMode.HTML
     ))
 
 
