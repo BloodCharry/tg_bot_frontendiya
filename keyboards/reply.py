@@ -7,25 +7,53 @@ from aiogram.types import (
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
-start_btn = ReplyKeyboardBuilder()
-start_btn.add(
-    KeyboardButton(text='меню \U0001F448'),
-    KeyboardButton(text='о нас \U0001F609'),
-    KeyboardButton(text='пробные уроки \U0001F58B'),
-    KeyboardButton(text='купить курсы \U0001F911', ),
-    KeyboardButton(text='Пообщаться \U0001F4AC'),
-)
-start_btn.adjust(2, 2, 1)
+def get_keyboard(
+        *btns: str,
+        placeholder: str = None,
+        request_contact: int = None,
+        request_location: int = None,
+        sizes: tuple[int] = (2,), ):
+    '''
+    Parameters request_contact and request_location must be as indexes of btns
+    args for buttons you need.
+    Example:
+    get_keyboard(
+    To request a contact or location, pass the button index to request_сontact or request_location
+            "Бесплатные материалы",
+            "Часто задаваемые вопросы",
+            "Хочу записаться к вам на мок-бес",
+            placeholder="Что вас интересует?",
+            request_contact=4,
+            sizes=(2, 2, 1)
+        )
+    '''
+    keyboard = ReplyKeyboardBuilder()
 
-menu_btn = ReplyKeyboardBuilder()
-menu_btn.add(
-    KeyboardButton(text='Первый пункт'),
-    KeyboardButton(text='Второй пункт'),
-    KeyboardButton(text='Трейтий пункт'),
-)
-menu_btn.adjust(1, 1, 1)
+    for index, text in enumerate(btns, start=0):
 
-new_menu_btn = ReplyKeyboardBuilder()
-new_menu_btn.attach(menu_btn)
-new_menu_btn.row(KeyboardButton(text='Оставить отзыв'))
+        if request_contact and request_contact == index:
+            keyboard.add(KeyboardButton(text=text, request_contact=True))
+
+        elif request_location and request_location == index:
+            keyboard.add(KeyboardButton(text=text, request_location=True))
+        else:
+
+            keyboard.add(KeyboardButton(text=text))
+
+    return keyboard.adjust(*sizes).as_markup(
+        resize_keyboard=True, input_field_placeholder=placeholder)
+
+
+
+# menu_btn = ReplyKeyboardBuilder()
+# menu_btn.add(
+#     KeyboardButton(text='Первый пункт'),
+#     KeyboardButton(text='Второй пункт'),
+#     KeyboardButton(text='Трейтий пункт'),
+# )
+# menu_btn.adjust(1, 1, 1)
+#
+# new_menu_btn = ReplyKeyboardBuilder()
+# new_menu_btn.attach(menu_btn)
+# new_menu_btn.row(KeyboardButton(text='Оставить отзыв'))
 # del_keyboard = ReplyKeyboardRemove()

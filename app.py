@@ -11,6 +11,8 @@ from aiogram.types import BotCommandScopeAllPrivateChats
 
 from dotenv import find_dotenv, load_dotenv
 
+from handlers.admin_private import admin_router
+
 load_dotenv(find_dotenv())
 
 from handlers.user_private import user_private_router
@@ -22,10 +24,12 @@ ALOOWED_OBDATES = [
     "edited_message"
 ]
 
-bot = Bot(token=os.getenv("TOKEN"),  parse_mode=ParseMode.HTML)
+bot = Bot(token=os.getenv("TOKEN"), parse_mode=ParseMode.HTML)
+bot.my_admins_list = []
+
 dp = Dispatcher()
 
-dp.include_routers(user_private_router, user_group_router)
+dp.include_routers(admin_router, user_private_router, user_group_router)
 
 
 async def main() -> None:
